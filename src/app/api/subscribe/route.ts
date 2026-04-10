@@ -22,17 +22,15 @@ export async function POST(request: Request) {
 
     if (emailResult.error) {
       return NextResponse.json(
-        { success: false, error: emailResult.error.message },
+        { success: false, error: "Something went wrong. Please try again." },
         { status: 500 },
       );
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unknown error.";
+  } catch {
     return NextResponse.json(
-      { success: false, error: message },
+      { success: false, error: "Something went wrong. Please try again." },
       { status: 500 },
     );
   }
