@@ -4,9 +4,30 @@ import { useState } from "react";
 
 export default function Home() {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = () => {
-    console.log(email);
+  const handleSubmit = async () => {
+    if (status === "loading") return;
+    setStatus("loading");
+    setErrorMessage("");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setStatus("error");
+        setErrorMessage(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+      setStatus("success");
+    } catch {
+      setStatus("error");
+      setErrorMessage("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -68,13 +89,38 @@ export default function Home() {
             color: "#141425",
             padding: "10px 16px",
             fontSize: "14px",
-            cursor: "pointer",
+            cursor: status === "loading" ? "default" : "pointer",
             userSelect: "none",
+            opacity: status === "loading" ? 0.7 : 1,
           }}
         >
-          Get early access
+          {status === "loading" ? "Sending..." : "Get early access"}
         </div>
       </div>
+      {status === "success" && (
+        <p
+          style={{
+            color: "#D4880A",
+            fontSize: "14px",
+            marginTop: "16px",
+            textAlign: "center",
+          }}
+        >
+          You&apos;re on the list.
+        </p>
+      )}
+      {status === "error" && (
+        <p
+          style={{
+            color: "#E8E4DE",
+            fontSize: "14px",
+            marginTop: "16px",
+            textAlign: "center",
+          }}
+        >
+          {errorMessage}
+        </p>
+      )}
     </main>
   );
 }
