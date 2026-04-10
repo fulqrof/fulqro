@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     const emailResult = await resend.emails.send({
-      from: "FULQRO <hello@fulqro.com>",
+      from: "FULQRO <onboarding@resend.dev>",
       to: email,
       subject: "You're on the list.",
       text: "We'll be in touch before anyone else. FULQRO",
