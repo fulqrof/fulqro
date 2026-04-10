@@ -82,7 +82,8 @@ export default function Home() {
             minWidth: "240px",
           }}
         />
-        <div
+        <button
+          type="button"
           onClick={handleSubmit}
           style={{
             background: "#D4880A",
@@ -92,10 +93,12 @@ export default function Home() {
             cursor: status === "loading" ? "default" : "pointer",
             userSelect: "none",
             opacity: status === "loading" ? 0.7 : 1,
+            border: "none",
+            fontFamily: "inherit",
           }}
         >
           {status === "loading" ? "Sending..." : "Get early access"}
-        </div>
+        </button>
       </div>
       {status === "success" && (
         <p
